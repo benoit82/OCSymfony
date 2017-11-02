@@ -32,11 +32,12 @@ class LoadUser implements FixtureInterface
             $manager->persist($user);
         }
         $user = new User;
-        $user->setUsername('Benoit');
-        $user->setPassword('benoit');
+        $user->setUsername('benoit');
+        $user->setPlainPassword('benoit');
         $user->setSalt('');
         $user->setRoles(['ROLE_ADMIN']);
         $user->setEmail('bntdbs@gmail.com');
+        $user->setEnabled(true);
         $manager->persist($user);
 
 
