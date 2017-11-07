@@ -83,3 +83,11 @@ fos_user:
     from_email:
       address: "bntdbs@gmail.com"
       sender_name: "Webmaster"
+
+
+# Activation de l'extension Twig intl
+services:
+  twig.extension.intl:
+    class: Twig_Extensions_Extension_Intl
+    tags:
+      - { name: twig.extension }
