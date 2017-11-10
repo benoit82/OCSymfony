@@ -12,7 +12,9 @@ use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class AdvertController extends Controller
 {
@@ -49,18 +51,21 @@ class AdvertController extends Controller
     ));
     }
 
-    public function viewAction($id)
+    /**
+     * @ParamConverter("advert", options={"mapping": {"advert_id":"id"}})
+     */
+    public function viewAction(Advert $advert)
     {
         $em = $this->getDoctrine()->getManager();
 
         // Pour récupérer une seule annonce, on utilise la méthode find($id)
-        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-
-        // $advert est donc une instance de OC\PlatformBundle\Entity\Advert
-        // ou null si l'id $id n'existe pas, d'où ce if :
-        if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
-        }
+        // $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+        //
+        // // $advert est donc une instance de OC\PlatformBundle\Entity\Advert
+        // // ou null si l'id $id n'existe pas, d'où ce if :
+        // if (null === $advert) {
+        //     throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        // }
 
         // Récupération de la liste des candidatures de l'annonce
         //     $listApplications = $em
@@ -110,7 +115,7 @@ class AdvertController extends Controller
 
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
-            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
+            return $this->redirectToRoute('oc_platform_view', array('advert_id' => $advert->getId()));
         }
 
         return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
@@ -118,15 +123,9 @@ class AdvertController extends Controller
     ));
     }
 
-    public function editAction($id, Request $request)
+    public function editAction(Advert $advert, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-
-        if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
-        }
 
         $form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 
@@ -136,7 +135,7 @@ class AdvertController extends Controller
 
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 
-            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
+            return $this->redirectToRoute('oc_platform_view', array('advert_id' => $advert->getId()));
         }
 
         return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
@@ -145,21 +144,14 @@ class AdvertController extends Controller
     ));
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, Advert $advert)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-
-        if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
-        }
-
         // On crée un formulaire vide, qui ne contiendra que le champ CSRF
         // Cela permet de protéger la suppression d'annonce contre cette faille
         $form = $this->get('form.factory')->create();
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $em->remove($advert);
             $em->flush();
 
@@ -210,5 +202,13 @@ class AdvertController extends Controller
         return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
         'name' => $name
       ));
+    }
+
+    /**
+     * @ParamConverter("json")
+     */
+    public function ParamConverterAction($json)
+    {
+        return new Response(var_dump($json, true));
     }
 }
