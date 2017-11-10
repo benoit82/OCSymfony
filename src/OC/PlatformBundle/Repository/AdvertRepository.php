@@ -76,8 +76,8 @@ class AdvertRepository extends EntityRepository
 
         // On peut ajouter ce qu'on veut avant
         $qb
-      ->where('a.author = :author')
-      ->setParameter('author', 'Marine')
+      ->where('a.user = :user')
+      ->setParameter('user', 'Marine')
     ;
 
         // On applique notre condition sur le QueryBuilder

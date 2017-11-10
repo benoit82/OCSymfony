@@ -63,10 +63,10 @@ class AdvertController extends Controller
         }
 
         // Récupération de la liste des candidatures de l'annonce
-        $listApplications = $em
-      ->getRepository('OCPlatformBundle:Application')
-      ->findBy(array('advert' => $advert))
-    ;
+        //     $listApplications = $em
+        //   ->getRepository('OCPlatformBundle:Application')
+        //   ->findBy(array('advert' => $advert))
+        // ;
 
         // Récupération des AdvertSkill de l'annonce
         $listAdvertSkills = $em
@@ -76,7 +76,8 @@ class AdvertController extends Controller
 
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
       'advert'           => $advert,
-      'listApplications' => $listApplications,
+      // 'listApplications' => $listApplications,
+      'listApplications' => [],
       'listAdvertSkills' => $listAdvertSkills,
     ));
     }
@@ -94,6 +95,7 @@ class AdvertController extends Controller
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             // On crée l'évènement avec ses 2 arguments
+            $advert->setUser($this->getUser());
             $event = new MessagePostEvent($advert->getContent(), $advert->getUser());
 
             // On déclenche l'évènement

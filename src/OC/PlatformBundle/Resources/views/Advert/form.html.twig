@@ -36,8 +36,6 @@
     </div>
   </div>
 
-  {{ form_row(form.author) }}
-
   {% if form.published is defined %}
     {{ form_row(form.published) }}
   {% endif %}
@@ -94,10 +92,9 @@
       // Dans le contenu de l'attribut « data-prototype », on remplace :
       // - le texte "__name__label__" qu'il contient par le label du champ
       // - le texte "__name__" qu'il contient par le numéro du champ
-      var template = $container.attr('data-prototype')
-        .replace(/__name__label__/g, 'Catégorie n°' + (index+1))
-        .replace(/__name__/g,        index)
-      ;
+      var template = $container.attr('data-prototype').replace(/__name__label__/g, 'Catégorie n°' + (
+        index + 1
+      )).replace(/__name__/g, index);
 
       // On crée un objet jquery qui contient ce template
       var $prototype = $(template);

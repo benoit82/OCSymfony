@@ -25,7 +25,7 @@ class ApplicationMailer
     );
 
     $message
-      ->addTo($application->getAdvert()->getAuthor()) // Ici bien sûr il faudrait un attribut "email", j'utilise "author" à la place
+      ->addTo($application->getAdvert()->getUser()) // Ici bien sûr il faudrait un attribut "email", j'utilise "user" à la place
       ->addFrom('admin@votresite.com')
     ;
 
