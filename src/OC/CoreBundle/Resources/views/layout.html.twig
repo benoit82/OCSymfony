@@ -10,10 +10,12 @@
       {% block title %}OC Plateforme{% endblock %}
     </title>
 
-    {% block stylesheets %}
-      {# On charge le CSS de bootstrap depuis le site directement #}
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    {% endblock %}
+    {% stylesheets 'bundles/ocplatform/css/main.css' %}
+    {# On charge le CSS de bootstrap depuis le site directement #}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+
+    {% endstylesheets %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   </head>
 
   <body>
